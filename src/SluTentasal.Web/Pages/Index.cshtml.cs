@@ -28,7 +28,7 @@ public class IndexModel(PasswordRepository repository, LocalClock clock, IOption
 
         var now = clock.Now;
         var active = await repository.GetActiveAsync(Campus, now);
-        var next = active is null ? await repository.GetNextStartAsync(Campus, now) : null;
+        var next = active is null ? await repository.GetNextStartTodayAsync(Campus, now) : null;
 
         return Partial("_Password", new PasswordViewModel(
             Campus,

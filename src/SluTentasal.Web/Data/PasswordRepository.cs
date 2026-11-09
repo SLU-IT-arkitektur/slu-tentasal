@@ -20,7 +20,7 @@ public sealed class PasswordRepository(IDbConnectionFactory connectionFactory, I
     private const string NextSql = """
         SELECT starttime
         FROM Passwords
-        WHERE campus = @campus AND starttime > @upper
+        WHERE campus = @campus AND starttime > @upper AND starttime < @dayEnd
         ORDER BY starttime
         """;
 
@@ -35,11 +35,13 @@ public sealed class PasswordRepository(IDbConnectionFactory connectionFactory, I
         return await connection.QueryFirstOrDefaultAsync<ActivePassword>(ActiveSql, new { campus, lower, upper });
     }
 
-    public async Task<DateTime?> GetNextStartAsync(string campus, DateTime now)
+    /// <summary>Nästa tenta som startar senare i dag. Tentor andra dagar visas inte på TV:n.</summary>
+    public async Task<DateTime?> GetNextStartTodayAsync(string campus, DateTime now)
     {
         var (_, upper) = Window(now);
+        var dayEnd = now.Date.AddDays(1);
         await using var connection = connectionFactory.Create();
-        return await connection.QueryFirstOrDefaultAsync<DateTime?>(NextSql, new { campus, upper });
+        return await connection.QueryFirstOrDefaultAsync<DateTime?>(NextSql, new { campus, upper, dayEnd });
     }
 
     private (DateTime Lower, DateTime Upper) Window(DateTime now) =>

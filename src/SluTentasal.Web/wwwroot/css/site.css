@@ -151,6 +151,20 @@ body:has(.panel.active) .panel .value { font-size: min(17vh, calc(125vw / var(--
     text-align: center;
 }
 
+/* Viloläge: inga fler tentor i dag. Ingen platta, klockan får hela ytan. */
+.panel.idle {
+    align-items: center;
+    padding: 0;
+}
+
+.panel.idle .headline {
+    font-weight: 300;
+    font-size: 4.5vh;
+    color: var(--text-muted);
+}
+
+body:has(.panel.idle) .password { min-height: 0; }
+
 .panel .label {
     font-weight: 400;
     font-size: 3.5vh;
