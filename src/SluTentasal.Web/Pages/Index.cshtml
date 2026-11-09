@@ -1,0 +1,25 @@
+@page
+@model IndexModel
+@{
+    ViewData["Title"] = Model.Campus ?? "Välj campus";
+}
+
+@if (string.IsNullOrWhiteSpace(Model.Campus))
+{
+    <h1>Tentasal</h1>
+    <p class="message">Ange campus i adressen, till exempel <code>?campus=Ultuna</code>.</p>
+}
+else
+{
+    <h1>@Model.Campus</h1>
+
+    <div class="clock"
+         hx-get="@Url.Page("Index", "Clock")"
+         hx-trigger="load, every 1s">
+    </div>
+
+    <div class="password"
+         hx-get="@Url.Page("Index", "Password", new { campus = Model.Campus })"
+         hx-trigger="load, every @(Model.PollSeconds)s">
+    </div>
+}
