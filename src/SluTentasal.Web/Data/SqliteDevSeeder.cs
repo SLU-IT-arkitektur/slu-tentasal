@@ -14,7 +14,6 @@ public static class SqliteDevSeeder
         connection.Execute("""
             CREATE TABLE IF NOT EXISTS Passwords (
                 campus    TEXT NOT NULL,
-                sal       TEXT NULL,
                 password  TEXT NOT NULL,
                 starttime TEXT NOT NULL
             )
@@ -29,7 +28,7 @@ public static class SqliteDevSeeder
             now.AddMinutes(minutes).ToString(SqliteDateTimeHandler.Format, CultureInfo.InvariantCulture);
 
         connection.Execute(
-            "INSERT INTO Passwords (campus, sal, password, starttime) VALUES (@campus, NULL, @password, @starttime)",
+            "INSERT INTO Passwords (campus, password, starttime) VALUES (@campus, @password, @starttime)",
             new[]
             {
                 new { campus = "Ultuna", password = "Tenta-Ultuna-42", starttime = At(10) },

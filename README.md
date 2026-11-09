@@ -49,4 +49,4 @@ Databasfel loggas med detaljer, men svaret från `/health` innehåller bara en a
 
 ## Databas
 
-Tabellen `Passwords` har kolumnerna `campus`, `sal`, `password` och `starttime`. Skript för att skapa den finns i [sql/](sql/) för SQL Server, PostgreSQL och SQLite.
+Tabellen `Passwords` har kolumnerna `campus`, `password` och `starttime`. Skript för att skapa den finns i [sql/](sql/) för SQL Server, PostgreSQL och SQLite.
