@@ -1,75 +1,232 @@
-:root {
-    --bg: #f7f7f5;
-    --fg: #1d1d1b;
-    --muted: #6b6b66;
-    --accent: #154734;
-    --card: #ffffff;
+/* Tentasal – helskärmsvy för TV i tentasal.
+   Färger och typsnitt enligt SLU:s grafiska profil. */
+
+@font-face {
+    font-family: "Roboto Condensed";
+    font-weight: 300;
+    font-display: block;
+    src: url("../fonts/roboto-condensed-latin-300.woff2") format("woff2");
 }
 
-@media (prefers-color-scheme: dark) {
-    :root {
-        --bg: #161615;
-        --fg: #ecece8;
-        --muted: #9a9a94;
-        --accent: #7fc3a0;
-        --card: #222220;
-    }
+@font-face {
+    font-family: "Roboto Condensed";
+    font-weight: 400;
+    font-display: block;
+    src: url("../fonts/roboto-condensed-latin-400.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: "Roboto Mono";
+    font-weight: 500;
+    font-display: block;
+    src: url("../fonts/roboto-mono-latin-500.woff2") format("woff2");
+}
+
+:root {
+    /* SLU-palett */
+    --skog: #154734;
+    --urskog: #002f17;
+    --natur: #00664f;
+    --liv: #6f263d;
+    --lindblom: #d8ed96;
+    --kada: #ffb81c;
+    --white: #ffffff;
+
+    --text: var(--white);
+    --text-muted: rgba(255, 255, 255, 0.72);
+    --gutter-x: 5vw;
+    --gutter-y: 4vh;
 }
 
 * { box-sizing: border-box; }
 
+html, body { height: 100%; }
+
 body {
     margin: 0;
-    min-height: 100vh;
-    display: grid;
-    place-items: center;
-    background: var(--bg);
-    color: var(--fg);
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    overflow: hidden;
+    background: radial-gradient(ellipse at 50% 35%, var(--skog) 0%, var(--skog) 45%, var(--urskog) 130%);
+    background-color: var(--skog);
+    color: var(--text);
+    font-family: "Roboto Condensed", "Arial Narrow", Arial, sans-serif;
+    font-weight: 300;
+    -webkit-font-smoothing: antialiased;
 }
 
-main {
-    width: 100%;
-    max-width: 48rem;
-    padding: 2rem 1rem;
+body.tv {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    height: 100vh;
+    padding: var(--gutter-y) var(--gutter-x) calc(var(--gutter-y) * 1.5);
+    cursor: none;
+    user-select: none;
+}
+
+p { margin: 0; }
+
+/* ---------- Sidhuvud ---------- */
+
+.top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 12vh;
+}
+
+.logo {
+    /* Bilden har stor inbyggd frizon runt symbolen; negativa marginaler
+       låter symbolen bli stor utan att sidhuvudet växer. */
+    height: 26vh;
+    width: auto;
+    margin: -7vh 0 -7vh -5vh;
+}
+
+.campus {
+    font-weight: 400;
+    font-size: 6vh;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--lindblom);
+}
+
+/* ---------- Klocka ---------- */
+
+.clock {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 400ms ease;
+}
+
+.clock .time {
+    font-size: 26vh;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+}
+
+.clock .date {
+    margin-top: 1.5vh;
+    font-size: 4.5vh;
+    color: var(--text-muted);
+}
+
+.clock .date::first-letter { text-transform: uppercase; }
+
+/* När lösenordet visas är det viktigast: klockan krymper och plattan får mer plats. */
+body:has(.panel.active) .clock .time { font-size: 17vh; }
+body:has(.panel.active) .clock .date { font-size: 3.8vh; }
+body:has(.panel.active) .password { min-height: 42vh; }
+body:has(.panel.active) .panel .value { font-size: min(17vh, calc(125vw / var(--len, 12))); }
+
+/* ---------- Lösenordsplatta ---------- */
+
+.password { min-height: 30vh; display: flex; }
+
+.panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1.5vh;
+    padding: 4vh 4vw;
+    border-radius: 2vh;
+    animation: fade-in 300ms ease;
+}
+
+.panel.steady { animation: none; }
+
+.panel.active {
+    background: var(--white);
+    color: var(--skog);
+    box-shadow: 0 2vh 6vh rgba(0, 0, 0, 0.35);
+}
+
+.panel.waiting,
+.panel.empty {
+    background: rgba(255, 255, 255, 0.08);
+    border: 0.3vh solid rgba(255, 255, 255, 0.18);
+    align-items: center;
     text-align: center;
 }
 
-h1 {
-    margin: 0 0 1rem;
-    font-size: clamp(2rem, 6vw, 3.5rem);
-    color: var(--accent);
-}
-
-.clock {
-    font-size: clamp(3rem, 14vw, 8rem);
-    font-variant-numeric: tabular-nums;
-    font-weight: 600;
-    min-height: 1.2em;
-}
-
-.password {
-    margin-top: 2rem;
-    padding: 2rem 1rem;
-    background: var(--card);
-    border-radius: 1rem;
-    min-height: 6rem;
-}
-
-.password p { margin: 0.25rem 0; }
-
-.label {
-    color: var(--muted);
+.panel .label {
+    font-weight: 400;
+    font-size: 3.5vh;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
-    font-size: 0.9rem;
+    color: var(--natur);
 }
 
-.value {
-    font-size: clamp(2rem, 9vw, 5rem);
-    font-weight: 700;
-    font-family: ui-monospace, Consolas, monospace;
-    word-break: break-all;
+.panel .value {
+    font-family: "Roboto Mono", Consolas, monospace;
+    font-weight: 500;
+    /* Monospace: ~0.64em per tecken inkl. spärrning. Krymper så att lösenordet alltid ryms på en rad. */
+    font-size: min(14vh, calc(125vw / var(--len, 12)));
+    line-height: 1.1;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    color: var(--natur);
 }
 
-.meta, .message { color: var(--muted); font-size: 1.25rem; }
+.panel .headline {
+    font-weight: 400;
+    font-size: 7vh;
+}
+
+.panel .meta {
+    font-size: 3.8vh;
+}
+
+.panel.active .meta { color: var(--skog); }
+.panel.waiting .meta,
+.panel.empty .meta { color: var(--text-muted); }
+
+.panel .sep { margin: 0 0.5em; font-weight: 400; opacity: 0.6; }
+
+.panel code {
+    font-family: "Roboto Mono", Consolas, monospace;
+    color: var(--lindblom);
+}
+
+/* ---------- Tappad kontakt ---------- */
+
+.offline-banner {
+    display: none;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 1.8vh var(--gutter-x);
+    background: var(--kada);
+    color: var(--urskog);
+    font-weight: 400;
+    font-size: 3.5vh;
+    text-align: center;
+}
+
+body.is-offline { padding-bottom: 10vh; }
+body.is-offline .offline-banner { display: block; }
+body.is-offline .clock { opacity: 0.35; }
+
+/* ---------- Felsida ---------- */
+
+.error {
+    grid-row: 2;
+    align-self: center;
+    text-align: center;
+}
+
+.error h1 { font-weight: 400; font-size: 8vh; margin: 0 0 2vh; }
+.error p { font-size: 4vh; color: var(--text-muted); }
+
+@keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .panel { animation: none; }
+    .clock { transition: none; }
+}

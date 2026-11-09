@@ -35,7 +35,8 @@ public class IndexModel(PasswordRepository repository, LocalClock clock, IOption
             now,
             active,
             next,
-            options.Value.ShowBeforeStartMinutes));
+            options.Value.ShowBeforeStartMinutes,
+            options.Value.ShowAfterStartMinutes));
     }
 }
 
@@ -44,4 +45,5 @@ public sealed record PasswordViewModel(
     DateTime Now,
     ActivePassword? Active,
     DateTime? NextStart,
-    int ShowBeforeStartMinutes);
+    int ShowBeforeStartMinutes,
+    int ShowAfterStartMinutes);

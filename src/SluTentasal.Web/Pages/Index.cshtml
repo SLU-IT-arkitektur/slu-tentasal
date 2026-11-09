@@ -4,22 +4,34 @@
     ViewData["Title"] = Model.Campus ?? "Välj campus";
 }
 
+<header class="top">
+    <img class="logo" src="~/slu_logo_webb/slu_logo_vit_webb.png" alt="SLU" />
+    @if (!string.IsNullOrWhiteSpace(Model.Campus))
+    {
+        <p class="campus">@Model.Campus</p>
+    }
+</header>
+
+<section class="clock"
+         hx-get="@Url.Page("Index", "Clock")"
+         hx-trigger="load, every 1s">
+</section>
+
 @if (string.IsNullOrWhiteSpace(Model.Campus))
 {
-    <h1>Tentasal</h1>
-    <p class="message">Ange campus i adressen, till exempel <code>?campus=Ultuna</code>.</p>
+    <section class="password">
+        <div class="panel empty">
+            <p class="headline">Inget campus valt</p>
+            <p class="meta">Ange campus i adressen, till exempel <code>?campus=Ultuna</code></p>
+        </div>
+    </section>
 }
 else
 {
-    <h1>@Model.Campus</h1>
-
-    <div class="clock"
-         hx-get="@Url.Page("Index", "Clock")"
-         hx-trigger="load, every 1s">
-    </div>
-
-    <div class="password"
-         hx-get="@Url.Page("Index", "Password", new { campus = Model.Campus })"
-         hx-trigger="load, every @(Model.PollSeconds)s">
-    </div>
+    <section class="password"
+             hx-get="@Url.Page("Index", "Password", new { campus = Model.Campus })"
+             hx-trigger="load, every @(Model.PollSeconds)s">
+    </section>
 }
+
+<div class="offline-banner" role="alert">Ingen kontakt med servern – tiden kan vara fel</div>

@@ -1,2 +1,7 @@
+@using System.Globalization
 @model DateTime
-<time datetime="@Model.ToString("s")">@Model.ToString("HH:mm:ss")</time>
+@{
+    var sv = CultureInfo.GetCultureInfo("sv-SE");
+}
+<time class="time" datetime="@Model.ToString("s")">@Model.ToString("HH:mm:ss", sv)</time>
+<p class="date">@Model.ToString("dddd d MMMM", sv)</p>

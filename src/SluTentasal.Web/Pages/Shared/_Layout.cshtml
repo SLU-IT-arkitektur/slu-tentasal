@@ -5,11 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] – Tentasal</title>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <script src="https://unpkg.com/htmx.org@2.0.4/dist/htmx.min.js"></script>
+    <script src="~/lib/htmx/htmx.min.js" asp-append-version="true"></script>
+    <script src="~/js/tv.js" asp-append-version="true" defer></script>
 </head>
-<body>
-    <main>
-        @RenderBody()
-    </main>
+<body class="tv">
+    @RenderBody()
 </body>
 </html>
